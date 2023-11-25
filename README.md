@@ -34,7 +34,7 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues, enviar p
 
 ## Suporte
 
-Em caso de dúvidas ou problemas, entre em contato conosco em [brunoparreira@gmail.com](mailto:brunoparreira@gmail.com).
+Em caso de dúvidas ou problemas, entre em contato conosco em [brunoparreira77@gmail.com](mailto:brunoparreira77@gmail.com).
 
 ## Licença
 
