@@ -1,0 +1,57 @@
+# Garante o bloqueio de acesso as pastas, mesmo quando estas não contêm o arquivo index.html
+Options -Indexes
+
+# ----------------------------------------------------------------------
+# Rewrite engine
+# ----------------------------------------------------------------------
+
+# Turning on the rewrite engine is necessary for the following rules and features.
+# FollowSymLinks must be enabled for this to work.
+<IfModule mod_rewrite.c>
+    # Para usar urls simbólicas. É preciso autorização no http.conf do apahce
+    # Options +FollowSymlinks
+    RewriteEngine On
+    
+    # Se você instalou o CodeIgniter em uma subpasta, você precisará
+    # altere a linha a seguir para corresponder à subpasta necessária.
+    # http://httpd.apache.org/docs/current/mod/mod_rewrite.html#rewritebase
+    # RewriteBase /
+    
+    #Para uso local, redireciona as chamadas assets para public_html/assets e theme para public_html/theme
+    RewriteRule ^theme/(.*)$ public_html/theme/$1 [L]
+    RewriteRule ^assets/(.*)$ public_html/assets/$1 [L]
+
+    # Remove a barra no final da url
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+    
+    # Remove "www", Ex.: "www.example.com -> example.com"
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
+    
+    # Verifica se o usuário está tentando acessar um arquivo válido/permitido,
+    # como uma imagem ou documento css, se isso não for verdade, ele envia a
+    # solicitação para o controller controller, index.php.
+    RewriteCond %{REQUEST_URI} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt|favicon\.ico)$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?$1 [L,NC,QSA]
+    # Se quiser passar a url como parametro "key"
+    #RewriteRule ^(.*)$ index.php?key=$1 [L,NC,QSA]
+    
+    # Ensure Authorization header is passed along
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # If we don't have mod_rewrite installed, all 404's
+    # can be sent to index.php, and everything works as normal.
+    ErrorDocument 404 index.php
+</IfModule>
+
+# Desabilita o envido de informmações do servidor nos cabeçalhos de respostas,
+# como versão de servidor, modulos instalados, etc.
+ServerSignature Off
