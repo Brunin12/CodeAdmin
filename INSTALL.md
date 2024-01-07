@@ -10,7 +10,7 @@ git clone https://github.com/Brunin12/CodeAdmin.git
 ```
 ## Configure
 
-Atualize o base url no .env para seu localhost especifico
+Renomeie o .env.example para .env e atualize o base url no .env para seu localhost especifico.
 
 Isso iniciará um servidor local e mostrará a URL do seu projeto. Acesse essa URL em seu navegador para visualizar o projeto.
 
